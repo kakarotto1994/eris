@@ -9,6 +9,8 @@ class Page {
     private $tpl;
     private $options = [];
     private $defaults = [
+        "header"=>true,
+        "footer"=>true,
         "data"=>[]
     ];
 
@@ -31,7 +33,7 @@ class Page {
 
         // Chama o arquivo que vai se repetir em todas as paginas
 
-        $this->tpl->draw("header");
+        if($this->tpl->draw("header")===true) $this->tpl->draw("header");
 
     }
 
@@ -51,7 +53,7 @@ class Page {
     //Cria o rodape, chamando o arquivo
     public function __destruct(){
 
-        $this->tpl->draw("footer");
+        if($this->tpl->draw("footer")===true) $this->tpl->draw("footer");
 
     }
 
