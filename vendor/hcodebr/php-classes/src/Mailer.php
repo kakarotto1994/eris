@@ -48,11 +48,11 @@
 
             $this->mail->SMTPAuth = true;
 
-            $this->mail->username = "Mailer::USERNAME";
+            $this->mail->username = "eris.pomo@gmail.com";
 
             // eris.1234
 
-            $this->mail->Password = "Mailer::PASSWORD";
+            $this->mail->Password = "eris.1234";
 
             $this->mail->setFrom(Mailer::USERNAME ,Mailer::NAME_FROM);
 
@@ -63,7 +63,7 @@
             //file_get_contents('contents.html'), dirname(__FILE__)
             $this->mail->msgHTML($html);
 
-            $this->mail->aLTbODY = "This is a plain-text message body";
+            $this->mail->AltBody = "This is a plain-text message body";
 
         }
 
