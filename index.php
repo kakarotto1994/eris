@@ -144,6 +144,36 @@ $app->post("/eris/users/:iduser", function($iduser) {
 
 });
 
+//Esqueci a senha
+
+$app->get("/eris/forgot", function() {
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+	$page->setTpl("forgot");
+});
+
+$app->post("/eris/forgot", function() {
+
+	$user = User::getForgot($_POST["email"]);
+
+	header("Location: /eris/forgot/sent");
+	exit;
+
+});
+
+$app->get("/eris/forgot/sent", function() {
+
+	$page = new PageAdmin([
+		"header"=>false,
+		"footer"=>false
+	]);
+
+	$page->setTpl("forgot-sent");
+
+});
 
 $app->run();
 

@@ -4,10 +4,12 @@
 namespace Hcode\Model;
 use \Hcode\DB\Sql;
 use \Hcode\Model;
+use \Hcode\Mailer;
 
 class User extends Model {
 
     const SESSION = "User";
+    const ENCRYPT = "Eris_pomo_secret";
 
     public static function login($login, $password)
     {
@@ -132,6 +134,57 @@ class User extends Model {
         $sql->select("CALL sp_users_delete(:iduser)", array(
             ":iduser"=>$this->getiduser()     
         ));
+
+    }
+
+    public static function getForgot($email){
+        $sql = new Sql();
+        $results = $sql->select(
+            "select * from tb_persons tp
+                join tb_users tu on tp.idperson = tu.idperson
+            where tp.desemail =  :EMAIL", 
+        array(
+            ":EMAIL"=>$email
+        ));
+        
+        if(count($results) === 0){
+            throw new \Exception("Email não encontrado. Favor valide as informações ou contacte um ADM");
+        } else
+        {
+
+            $data = $results[0];
+
+            $forgot = $sql->select("CALL sp_userspasswordsrecoveries_create(:iduser, :desip)", array(
+
+                ":iduser"=>$data["iduser"],
+                ":desip"=>$_SERVER["REMOTE_ADDR"]
+
+            ));
+
+            if(count($forgot)===0){
+
+                throw new \Exception("Email não encontrado. Favor valide as informações ou contacte um ADM");
+            } else {
+
+                $dataRecovery = $forgot[0];
+            
+                
+                $code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128,User::ENCRYPT,$dataRecovery["idrecovery"], MCRYPT_MODE_ECB));
+
+                $link = "http://www.eeris.com.br/eris/forgot/reset?code=$code";
+
+                $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinicao Senha Eris MegaStore", "forgot", array(
+                    "name"=>$data["desperson"],
+                    "link"=>$link
+                ));
+                
+                $mailer->send();
+
+                return $data;
+            }
+
+        }
+
 
     }
 
