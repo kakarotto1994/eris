@@ -167,8 +167,7 @@ class User extends Model {
             } else {
 
                 $dataRecovery = $forgot[0];
-            
-                
+                            
                 $code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128,User::ENCRYPT,$dataRecovery["idrecovery"], MCRYPT_MODE_ECB));
 
                 $link = "http://www.eeris.com.br/eris/forgot/reset?code=$code";
@@ -185,7 +184,52 @@ class User extends Model {
 
         }
 
+    }
 
+    public static function validForgotDecrypt($code){
+
+        $idrecovery = mcrypt_decrypy(MCRYPT_RIJNDAEL_128,User::ENCRYPT, base64_decode($code), MCRYPT_MODE_ECB);
+
+        $sql = new Sql();
+
+        $results = $sql->select(
+            "SELECT * 
+            FROM db_ecommerce.tb_userspasswordsrecoveries rec
+                left join tb_users tu on rec.iduser = tu.iduser
+                left join tb_persons tp on tp.idperson = tu.idperson
+            where rec.idrecovery = :idrecovery
+                and rec.dtrecovery is null
+                and now() <= date_add(rec.dtregister, interval 70 minute);", 
+            array(
+                ":idrecovery"=>$idrecovery
+            ));
+            
+        if(count($result)===0){
+            throw new \Exception("Não foi possivel recuperar a senha");
+        } else {
+
+            return $results[0];
+
+        }
+    }
+
+    public static function setForgotUsed($idrecovery){
+
+        $sql = new Sql();
+
+        $sql->query("update tb_userspasswordsrecoveries set dtrecovery = now() and idrecovery = :idrecovery", array(
+            ":idrecovery"=>$idrecovery
+        ));
+
+    }
+
+    public function setPassword($password){
+        $sql = new Sql();
+
+        $sql->query("update tb_users set despassword = :password where iduser = :iduser", array (
+            ":password"=>$password,
+            ":iduser"=>$this->getiduser()
+        ));
     }
 
 }
