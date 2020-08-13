@@ -220,7 +220,7 @@ $app->post("/eris/forgot/reset", function() {
 // Start Categorias 
 $app->get('/eris/categories', function (){
 	User::verifyLogin();
-	
+
 	$categories = Category::listAll();
 
 	$page = new PageAdmin();
@@ -302,7 +302,24 @@ $app->post('/eris/categories/:idcategory', function ($idcategory){
 
 });
 
-// end Categorias 
+// end Categorias admin
+
+//start categoria Site Eris
+
+$app->get('/categories/:idcategory', function($idcategory) {
+
+	$category = new Category();
+
+	$category->get((int)$idcategory);
+
+	$page = new Page();
+
+	$page->setTpl("category", [
+		"category"=>$category->getValues(),
+		"products"=>[]
+	]);
+
+});
 
 $app->run();
 
