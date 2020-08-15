@@ -29,12 +29,7 @@ class Product extends Model {
         return $list;
 
     }
-
-    public static function formatPrice() {
-
-        
-
-    }
+    
 
     public function save(){
 

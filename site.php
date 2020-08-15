@@ -30,7 +30,7 @@ $app->get('/categories/:idcategory', function($idcategory) {
 
 	$page->setTpl("category", [
 		"category"=>$category->getValues(),
-		"products"=>[]
+		"products"=>Product::checkList($category->getProducts())
 	]);
 
 });
