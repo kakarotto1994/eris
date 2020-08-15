@@ -53,4 +53,22 @@ $app->get('/categories/:idcategory', function($idcategory) {
 
 //end categoria Site Eri
 
+$app->get('/products/:desurl', function($desurl) {
+
+	$product = new Product();
+
+	$url = $product->getFromUrl($desurl);
+
+	$page = new Page();
+
+	$categories = $product->getCategories();
+
+	$page->setTpl("product-detail", [
+		'product'=>$product->getValues(),
+		'categories'=>$categories
+	]);
+
+});
+
+
 ?>
