@@ -4,6 +4,7 @@ use \Slim\Slim;
 use \Hcode\Page;
 use \Hcode\Model\Category;
 use \Hcode\Model\Product;
+use \Hcode\Model\Cart;
 
 //rota index php
 $app->get('/', function() {
@@ -69,6 +70,21 @@ $app->get('/products/:desurl', function($desurl) {
 	]);
 
 });
+
+//carrinho de compra
+
+$app->get('/cart', function() {
+
+	$product = new Product();
+
+	$cart = Cart::getFromSession();
+
+	$page = new Page();
+
+	$page->setTpl("cart");
+
+});
+
 
 
 ?>
