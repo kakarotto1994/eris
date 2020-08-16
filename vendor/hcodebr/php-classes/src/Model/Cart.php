@@ -238,13 +238,17 @@ class Cart extends Model {
 
             $result = $xml->Servicos->cServico;
 
+            // Cart::clearMsgError();
+
             if ($result->MsgErro != "") {
 
-                Cart::setMsgError($result->MsgErro);
+                $error = $result->MsgErro;
+
+                Cart::setMsgError($error);
 
             } else {
 
-//                Cart::clearMsgError();
+                // Cart::clearMsgError();
 
             }
             
@@ -273,7 +277,7 @@ class Cart extends Model {
 
     }
 
-    public static function setMsgErrror($msg) {
+    public static function setMsgError($msg) {
 
         $_SESSION[Cart::SESSION_ERROR] = $msg;
 
@@ -282,8 +286,6 @@ class Cart extends Model {
     public static function getMsgError() {
 
         $msg = (isset($_SESSION[Cart::SESSION_ERROR])) ? $_SESSION[Cart::SESSION_ERROR] : "";
-
-        Cart::clearMsgError();
 
         return $msg;
 
