@@ -152,4 +152,16 @@ $app->post('/cart/freight', function() {
 
 });
 
+$app->get("/checkout", function() {
+
+	$page = new Page();
+
+	$page->setTpl('checkout', [
+
+		
+
+	]);
+
+});
+
 ?>
