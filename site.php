@@ -192,12 +192,16 @@ $app->post("/login", function() {
 
 	User::login($_POST["login"], $_POST["password"]);
 
+	header("Location: /cart");
+
 	} catch(Exception $e) {
+
+		header("Location: /login");
 
 		User::setError($e->getMessage());
 
 	}
-	header("Location: /checkout");
+
 	exit;
 
 });
@@ -210,6 +214,25 @@ $app->get("/logout", function() {
 
 	header("Location: /");
 	exit;
+
+});
+
+$app->post("/register", function() {
+
+	$user = new User();
+
+	$user->setData([
+		'inadmin'=>0,
+		'deslogin'=>$_POST['email'],
+		'desperson'=>$_POST['name'],
+		'despassword'=>$_POST['password'],
+		'desemail'=>$_POST['email'],
+		'nrphone'=>$_POST['phone']
+	]);
+
+	$user->save();
+
+	header('Location: /cart');
 
 });
 
