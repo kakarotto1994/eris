@@ -112,6 +112,61 @@ class Cart extends Model {
 
     }
 
+    //adicionar produtos ao carrinho
+
+    public function addProduct(Product $product) {
+
+        $sql = new Sql();
+        $sql->query("insert into tb_cartsproducts (idcart, idproduct, dtregister) values (:idcart, :idproduct, now())", [
+            ":idcart"=>$this->getidcart(),
+            ":idproduct"=>$product->getidproduct()
+        ]);
+    }
+
+    //remover produtos do carrinho
+    public function removeProduct(Product $product, $all = false) {
+
+        $sql = new Sql();
+
+        if($all) {
+
+            $sql->query("update tb_cartsproducts set dtremoved = now() where idproduct = :idproduct and idcart = :idcart
+            and dtremoved is null", [
+                ":idcart"=>$this->getidcart(),
+                ":idproduct"=>$product->getidproduct()
+            ]);
+
+        } else {
+
+            $sql->query("update tb_cartsproducts set dtremoved = now() where idproduct = :idproduct and idcart = :idcart 
+            and dtremoved is null limit 1", [
+                ":idcart"=>$this->getidcart(),
+                ":idproduct"=>$product->getidproduct()
+            ]);
+
+        }
+
+    }
+
+    public function getProducts() {
+
+        $sql = new Sql();
+
+        $row = $sql->select("
+        select p.idproduct, p.desproduct, p.vlprice, p.vlwidth, p.vlheight, p.vllength, p.vlweight, p.desurl, count(*) as qtd, sum(p.vlprice) as vltotal  
+        from tb_cartsproducts cp 
+            join tb_products p on cp.idproduct = p.idproduct 
+        where cp.idcart = :idcart and cp.dtremoved is null 
+            group by p.idproduct, p.desproduct, p.vlprice, p.vlwidth, p.vlheight, p.vllength, p.vlweight, p.desurl
+            order by p.desproduct;", [
+                ":idcart"=>$this->getidcart()
+            ]);
+
+        return Product::checkList($row);
+
+    }
+
+
 
 }
 
