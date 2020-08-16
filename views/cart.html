@@ -93,12 +93,25 @@
                                         <tbody>
                                             <tr class="cart-subtotal">
                                                 <th>Subtotal</th>
-                                                <td><span class="amount">R$ {function="formatPrice($cart.vlsubtotal)"}</span></td>
+                                                <td><span class="amount">
+                                                    {if="$cart.vlsubtotal !=''"}
+                                                        R$ {function="formatPrice($cart.vlsubtotal)"}
+                                                    {else}
+                                                        R$ 0,00
+                                                    {/if}
+                                                </span></td>
                                             </tr>
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td>R$ {function="formatPrice($cart.vlfreight)"} {if="($cart.nrdays) > 0"}<small>- prazo de {$cart.nrdays} dias uteis</small> {/if}</td>
+                                                <td>
+                                                {if="$cart.vlfreight !=''"}
+                                                    R$ {function="formatPrice($cart.vlfreight)"}
+                                                {else}
+                                                    R$ 0,00
+                                                {/if} 
+                                             
+                                                {if="($cart.nrdays) > 0"}<small>- prazo de {$cart.nrdays} dias uteis</small> {/if}</td>
                                             </tr>
 
                                             <tr class="order-total">

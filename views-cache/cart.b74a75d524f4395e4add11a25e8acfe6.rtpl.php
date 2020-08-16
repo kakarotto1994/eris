@@ -93,12 +93,25 @@
                                         <tbody>
                                             <tr class="cart-subtotal">
                                                 <th>Subtotal</th>
-                                                <td><span class="amount">R$ <?php echo formatPrice($cart["vlsubtotal"]); ?></span></td>
+                                                <td><span class="amount">
+                                                    <?php if( $cart["vlsubtotal"] !='' ){ ?>
+                                                        R$ <?php echo formatPrice($cart["vlsubtotal"]); ?>
+                                                    <?php }else{ ?>
+                                                        R$ 0,00
+                                                    <?php } ?>
+                                                </span></td>
                                             </tr>
 
                                             <tr class="shipping">
                                                 <th>Frete</th>
-                                                <td>R$ <?php echo formatPrice($cart["vlfreight"]); ?> <?php if( ($cart["nrdays"]) > 0 ){ ?><small>- prazo de <?php echo htmlspecialchars( $cart["nrdays"], ENT_COMPAT, 'UTF-8', FALSE ); ?> dias uteis</small> <?php } ?></td>
+                                                <td>
+                                                <?php if( $cart["vlfreight"] !='' ){ ?>
+                                                    R$ <?php echo formatPrice($cart["vlfreight"]); ?>
+                                                <?php }else{ ?>
+                                                    R$ 0,00
+                                                <?php } ?> 
+                                             
+                                                <?php if( ($cart["nrdays"]) > 0 ){ ?><small>- prazo de <?php echo htmlspecialchars( $cart["nrdays"], ENT_COMPAT, 'UTF-8', FALSE ); ?> dias uteis</small> <?php } ?></td>
                                             </tr>
 
                                             <tr class="order-total">
