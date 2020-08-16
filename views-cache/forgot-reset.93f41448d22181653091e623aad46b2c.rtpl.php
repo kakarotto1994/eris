@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -28,14 +28,29 @@
   <div class="lockscreen-logo">
     <a href="/res/admin/index2.html"><b>Admin</b>LTE</a>
   </div>
-
-  <!-- /.lockscreen-item -->
-  <div class="help-block text-center">
-    <div class="callout callout-success">
-      <h4>Senha Alterada!</h4>
-      <p>Tente fazer o login com sua nova senha.<br><a href="/eris/login">Clique aqui</a> para fazer o login.</p>
+  
+   <div class="help-block text-center">
+     Olá <?php echo htmlspecialchars( $name, ENT_COMPAT, 'UTF-8', FALSE ); ?>, digite uma nova senha:
     </div>
+
+  <!-- START LOCK SCREEN ITEM -->
+  <div class="lockscreen-item">
+
+    <!-- lockscreen credentials (contains the form) -->
+    <form  action="/eris/forgot/reset" method="post">
+      <input type="hidden" name="code" value="<?php echo htmlspecialchars( $code, ENT_COMPAT, 'UTF-8', FALSE ); ?>">
+      <div class="input-group">
+        <input type="password" class="form-control" placeholder="Digite a nova senha" name="password">
+        <div class="input-group-btn">
+          <button type="submit" class="btn"><i class="fa fa-arrow-right text-muted"></i></button>
+        </div>
+      </div>
+    </form>
+    <!-- /.lockscreen credentials -->
+
   </div>
+  <!-- /.lockscreen-item -->
+  
   <div class="lockscreen-footer text-center">
     Copyright &copy; 2014-2016 <b><a href="http://almsaeedstudio.com" class="text-black">Almsaeed Studio</a></b><br>
     All rights reserved

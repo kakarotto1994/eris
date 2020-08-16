@@ -252,7 +252,7 @@ class Cart extends Model {
             $this->setvlfreight(Cart::formatValueToDecimal($result->Valor));
             $this->setdeszipcode($nrzipcode);
 
-           $this->save();
+            $this->save();
 
             return $result; 
 

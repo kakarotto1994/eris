@@ -88,7 +88,7 @@ class User extends Model {
     // Verifica se o usuario está logado
     public static function verifyLogin($inadmin = true){
 
-        if(User::checkLogin($inadmin)) 
+        if(User::checkLogin($inadmin) === false) 
         {
 
             header("Location: /eris/login");
@@ -226,7 +226,7 @@ class User extends Model {
 
     public static function validForgotDecrypt($code){
 
-        $idrecovery = mcrypt_decrypy(MCRYPT_RIJNDAEL_128,User::ENCRYPT, base64_decode($code), MCRYPT_MODE_ECB);
+        $idrecovery = mcrypt_decrypt(MCRYPT_RIJNDAEL_128,User::ENCRYPT, base64_decode($code), MCRYPT_MODE_ECB);
 
         $sql = new Sql();
 
@@ -242,7 +242,7 @@ class User extends Model {
                 ":idrecovery"=>$idrecovery
             ));
             
-        if(count($result)===0){
+        if(count($results)===0){
             throw new \Exception("Não foi possivel recuperar a senha");
         } else {
 
@@ -255,7 +255,7 @@ class User extends Model {
 
         $sql = new Sql();
 
-        $sql->query("update tb_userspasswordsrecoveries set dtrecovery = now() and idrecovery = :idrecovery", array(
+        $sql->query("update tb_userspasswordsrecoveries set dtrecovery = now() where idrecovery = :idrecovery", array(
             ":idrecovery"=>$idrecovery
         ));
 
@@ -264,10 +264,11 @@ class User extends Model {
     public function setPassword($password){
         $sql = new Sql();
 
-        $sql->query("update tb_users set despassword = :password where iduser = :iduser", array (
-            ":password"=>$password,
+        $sql->query("update tb_users set despassword = :despassword where iduser = :iduser", array (
+            ":despassword"=>$password,
             ":iduser"=>$this->getiduser()
         ));
+
     }
 
 }

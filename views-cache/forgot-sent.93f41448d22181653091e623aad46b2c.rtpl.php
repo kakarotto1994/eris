@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -32,8 +32,9 @@
   <!-- /.lockscreen-item -->
   <div class="help-block text-center">
     <div class="callout callout-success">
-      <h4>Senha Alterada!</h4>
-      <p>Tente fazer o login com sua nova senha.<br><a href="/eris/login">Clique aqui</a> para fazer o login.</p>
+      <h4>E-mail enviado!</h4>
+
+      <p>Verifique as instruções no seu e-mail.</p>
     </div>
   </div>
   <div class="lockscreen-footer text-center">

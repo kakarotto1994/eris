@@ -30,6 +30,7 @@ $app->get("/eris/login", function() {
 $app->post("/eris/login", function() {
 	
 	User::login($_POST["login"], $_POST["password"]);
+
 	header("Location: /eris");
 	exit;
 
@@ -94,6 +95,8 @@ $app->get("/eris/forgot/reset", function() {
 
 $app->post("/eris/forgot/reset", function() {
 
+
+
 	$forgot = User::validForgotDecrypt($_POST["code"]);
 
 	User::setForgotUsed($forgot["idrecovery"]);
@@ -106,7 +109,7 @@ $app->post("/eris/forgot/reset", function() {
 		"cost"=>10
 	]);
 
-	$user->setPassword($_POST["password"]);
+	$user->setPassword($password);
 
 	$page = new PageAdmin([
 		"header"=>false,
@@ -114,6 +117,8 @@ $app->post("/eris/forgot/reset", function() {
 	]);
 
 	$page->setTpl("forgot-reset-success");
+
+	var_dump($password);
 
 });
 
