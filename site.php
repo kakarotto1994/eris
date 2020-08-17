@@ -179,8 +179,11 @@ $app->get("/login", function() {
 
 	$page = new Page();
 
+
 	$page->setTpl("login", [
-		"error"=>User::getError()
+		"error"=>User::getError(),
+		"errorRegister"=>User::getErrorRegister(),
+		"registerValues"=>(isset($_SESSION['registerValues'])) ? $_SESSION['registerValues'] : ['name'=>'', 'email'=> '', 'phone'=>'']
 	]);
 
 });
@@ -219,6 +222,47 @@ $app->get("/logout", function() {
 
 $app->post("/register", function() {
 
+	$_SESSION['registerValues'] = $_POST;
+
+	//travar nome vazio
+
+	if (!isset($_POST['name']) || $_POST['name'] == "") {
+
+		User::setErrorRegister("Preencha seu nome.");
+		header("Location: /login");
+		exit;
+
+	}
+
+	//travar email vazio
+
+	if (!isset($_POST['email']) || $_POST['email'] == "") {
+
+		User::setErrorRegister("Preencha seu email.");
+		header("Location: /login");
+		exit;
+
+	}
+
+	//travar senha vazia
+
+	if (!isset($_POST['password']) || $_POST['password'] == "") {
+
+		User::setErrorRegister("Preencha sua senha.");
+		header("Location: /login");
+		exit;
+
+	}
+
+
+	if (User::checkLoginExist($_POST['email'])) {
+
+		User::setErrorRegister("Usuário já existe, favor verificar.");
+		header("Location: /login");
+		exit;
+
+	}
+
 	$user = new User();
 
 	$user->setData([
@@ -232,7 +276,10 @@ $app->post("/register", function() {
 
 	$user->save();
 
+	User::login($_POST['email'], $_POST['password']);
+
 	header('Location: /cart');
+	exit;
 
 });
 

@@ -319,6 +319,48 @@ class User extends Model {
         ]);
 
     }
+
+    public static function setErrorRegister($msg) {
+
+        $_SESSION[User::ERROR_REGISTER] = $msg;
+
+    }
+
+    public static function getErrorRegister(){
+
+        // User::clearErrorRegister();
+
+
+        $msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : "";
+
+        return $msg;
+
+    }
+
+    public static function clearErrorRegister() {
+
+        $_SESSION[User::ERROR_REGISTER] = NULL;
+
+    }
+
+    //Valida se o usuario já existe
+
+    public static function checkLoginExist($login) {
+
+        $sql = new Sql();
+
+        $results = $sql->select("
+        select * from tb_users where deslogin = :deslogin
+        ", [
+            ":deslogin"=>$login
+        ]);
+
+        return (count($results) > 0);
+
+
+
+    }
+
 }
 
 ?>
