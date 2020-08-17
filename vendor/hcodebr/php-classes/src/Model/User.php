@@ -194,7 +194,7 @@ class User extends Model {
 
     }
 
-    public static function getForgot($email){
+    public static function getForgot($email, $inadmin = true) {
         $sql = new Sql();
         $results = $sql->select(
             "select * from tb_persons tp
@@ -227,7 +227,15 @@ class User extends Model {
                             
                 $code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128,User::ENCRYPT,$dataRecovery["idrecovery"], MCRYPT_MODE_ECB));
 
-                $link = "http://www.eeris.com.br/eris/forgot/reset?code=$code";
+                if($inadmin) {
+
+                    $link = "http://www.eeris.com.br/eris/forgot/reset?code=$code";
+
+                } else {
+
+                    $link = "http://www.eeris.com.br/forgot/reset?code=$code";
+
+                }
 
                 $mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinicao Senha Eris MegaStore", "forgot", array(
                     "name"=>$data["desperson"],
@@ -249,6 +257,7 @@ class User extends Model {
 
         $sql = new Sql();
 
+
         $results = $sql->select(
             "SELECT * 
             FROM db_ecommerce.tb_userspasswordsrecoveries rec
@@ -260,6 +269,7 @@ class User extends Model {
             array(
                 ":idrecovery"=>$idrecovery
             ));
+
             
         if(count($results)===0){
             throw new \Exception("Não foi possivel recuperar a senha");
