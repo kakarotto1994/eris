@@ -12,6 +12,8 @@ class User extends Model {
     const ENCRYPT = "Eris_pomo_secret";
     const ERROR = "UserError";
     const ERROR_REGISTER = "UserErrorRegister";
+    const SUCCESS = 'UserSuccess';
+
 
     public static function getFromSession(){
 
@@ -169,16 +171,18 @@ class User extends Model {
 //  pnrphone BIGINT, 
 //   pinadmin TINYINT
 
-    $results = $sql->select("call sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
-        ":iduser"=>$this->getiduser(),
-        ":desperson"=>utf8_decode($this->getdesperson()),
-        ":deslogin"=>$this->getdeslogin(),
-        ":despassword"=>User::getPasswordHash($this->getdespassword()),
-        ":desemail"=>$this->getdesemail(),
-        ":nrphone"=>$this->getnrphone(),
-        ":inadmin"=>$this->getinadmin()
-    ));
-    $this->setData($results[0]);    
+        $results = $sql->select("call sp_usersupdate_save(:iduser, :desperson, :deslogin, :despassword, :desemail, :nrphone, :inadmin)", array(
+            ":iduser"=>$this->getiduser(),
+            ":desperson"=>utf8_decode($this->getdesperson()),
+            ":deslogin"=>$this->getdeslogin(),
+            ":despassword"=>User::getPasswordHash($this->getdespassword()),
+            ":desemail"=>$this->getdesemail(),
+            ":nrphone"=>$this->getnrphone(),
+            ":inadmin"=>$this->getinadmin()
+        ));
+
+        $this->setData($results[0]); 
+    
     }
 
     public function delete(){
@@ -302,6 +306,9 @@ class User extends Model {
 
     public static function setError($msg) {
 
+        User::clearSuccess();
+        User::clearError();
+
         $_SESSION[User::ERROR]  = $msg;
 
     }
@@ -367,9 +374,32 @@ class User extends Model {
 
         return (count($results) > 0);
 
+    }
 
+
+    public static function setSuccess($msg) {
+
+        User::clearSuccess();
+        User::clearError();   
+
+        $_SESSION[User::SUCCESS]  = $msg;
 
     }
+
+    public static function getSuccess() {
+
+        $msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : "";
+
+        return $msg;
+
+    }
+
+    public static function clearSuccess() {
+
+        $_SESSION[User::SUCCESS] = NULL;
+
+    } 
+
 
 }
 

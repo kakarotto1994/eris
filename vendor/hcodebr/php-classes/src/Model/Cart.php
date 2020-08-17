@@ -212,6 +212,9 @@ class Cart extends Model {
 
             if($totals["vlheight"] < 1) $totals["vlheight"] = 1;
             if($totals["vllength"] < 15) $totals["vllength"] = 15;
+            if($totals['vlweight'] == '') $totals['vlweight'] = 0;
+            if($totals["vlwidth"] == '') $totals["vlwidth"] = 0;
+            if($totals['vlprice'] == '') $totals['vlprice'] = 0;
 
 
             $qs = http_build_query([
@@ -251,8 +254,17 @@ class Cart extends Model {
                 // Cart::clearMsgError();
 
             }
+
+            if ($result->PrazoEntrega > 0) {
             
-            $this->setnrdays($result->PrazoEntrega + 1);
+                $this->setnrdays($result->PrazoEntrega + 1);
+
+            } else {
+
+                $this->setnrdays($result->PrazoEntrega);
+
+            }
+
             $this->setvlfreight(Cart::formatValueToDecimal($result->Valor));
             $this->setdeszipcode($nrzipcode);
 
