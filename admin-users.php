@@ -82,6 +82,21 @@ $app->post("/eris/users/:iduser", function($iduser) {
 	$user = new User();
 	$_POST["inadmin"] = (isset($_POST["inadmin"]))?1:0;
 	$user->get((int)$iduser);
+
+	if(isset($_POST['despassword'])) {
+
+		if(passowrd_verify($_POST['despassword'], $user->getdespassword())){
+		
+			$_POST['despassword'] = $user->getdespassword();
+		
+		} else {
+
+			$_POST['despassword'] = User::getPasswordHash($_POST['despassword']);
+
+		}
+
+	} 
+
 	$user->setData($_POST);
 	$user->update();
 	header("Location: /eris/users");

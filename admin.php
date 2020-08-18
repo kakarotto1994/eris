@@ -118,8 +118,6 @@ $app->post("/eris/forgot/reset", function() {
 
 	$page->setTpl("forgot-reset-success");
 
-	var_dump($password);
-
 });
 
 

@@ -364,6 +364,10 @@ $app->get("/profile", function() {
 
 	]);
 
+	User::clearSuccess();
+	User::clearError();
+
+
 });
 
 $app->post("/profile", function() {
@@ -405,7 +409,24 @@ $app->post("/profile", function() {
 	}
 
 	$_POST['inadmin'] = $user->getinadmin();
-	$_POST['despassword'] = $user->getdespassword();
+	
+	if(isset($_POST['despassword'])) {
+
+		if(passowrd_verify($_POST['despassword'], $user->getdespassword())){
+		
+			$_POST['despassword'] = $user->getdespassword();
+		
+		} else {
+
+			User::setError("Erro ao acessar o metodo. Favor realizar o reset da senha pelos metodos corretos.");
+			header('Location: /profile');
+			exit;
+
+		}
+
+	} 
+	
+
 	$_POST['deslogin'] = $_POST['desemail'];
 
 	$user->setData($_POST);
