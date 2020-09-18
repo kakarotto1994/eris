@@ -400,6 +400,32 @@ class User extends Model {
 
     } 
 
+    public function getOrders() {
+
+        $sql = new Sql();
+
+        $results = $sql->select("
+        select * from 
+        tb_orders o 
+            left join tb_ordersstatus os
+                on o.idstatus = os.idstatus
+            join tb_carts c 
+                on o.idcart = c.idcart
+            left join tb_users u
+                on o.iduser = u.iduser
+            left join tb_addresses a
+                on o.idaddress = a.idaddress
+            left join tb_persons p
+                on u.idperson = p.idperson
+                where o.iduser = :iduser
+            ", [
+            ":iduser"=>$this->getiduser()
+        ]);
+
+        return $results; 
+
+    }
+
 
 }
 

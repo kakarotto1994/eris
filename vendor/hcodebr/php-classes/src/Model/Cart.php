@@ -173,6 +173,24 @@ class Cart extends Model {
 
     }
 
+    public function getOrderProducts() {
+
+        $sql = new Sql();
+
+        $row = $sql->select("
+        select p.idproduct, p.desproduct, p.vlprice, p.vlwidth, p.vlheight, p.vllength, p.vlweight, p.desurl, count(*) as qtd, sum(p.vlprice) as vltotal  
+        from tb_cartsproducts cp 
+            join tb_products p on cp.idproduct = p.idproduct 
+        where cp.idcart = :idcart
+            group by p.idproduct, p.desproduct, p.vlprice, p.vlwidth, p.vlheight, p.vllength, p.vlweight, p.desurl
+            order by p.desproduct;", [
+                ":idcart"=>$this->getidcart()
+            ]);
+
+        return Product::checkList($row);
+
+    }
+
 
     // total dimensoes e peso do carrinho. Soma de todos os atributos do carrinho
     public function getProductsTotals() {
