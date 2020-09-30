@@ -11,9 +11,13 @@ $app->get('/eris', function() {
 
 	User::verifyLogin();
 
+	$user = User::getFromSession();
+
 	$page = new PageAdmin();
 
-	$page->setTpl("index");
+	$page->setTpl("index", [
+		"user"=>$user->getValues()
+	]);
 
 });
 

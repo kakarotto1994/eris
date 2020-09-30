@@ -452,6 +452,7 @@ $app->post("/forgot/reset", function() {
 
 });
 
+// ------------------------------
 
 //Minha conta Profile
 
@@ -549,7 +550,7 @@ $app->post("/profile", function() {
 
 });
 
-
+// Pedido finalizado (exibindo boleto)
 $app->get('/order/:idorder', function($idorder) {
 
 	User::verifyLogin(false);
@@ -571,7 +572,7 @@ $app->get('/order/:idorder', function($idorder) {
 
 $app->get('/boleto/:idorder', function($idorder) {
 
-	User::verifyLogin();
+	User::verifyLogin(false);
 
 	$order = new Order();
 
